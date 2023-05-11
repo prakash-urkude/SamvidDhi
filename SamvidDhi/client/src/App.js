@@ -84,8 +84,9 @@ function App() {
           <button onClick={getExchangeRate}>Get Exchange Rate</button>
           <button onClick={convertCurrency}>Convert Currency</button>
         </div>
+        <div className='final'>
         {exchangeRate && (
-          <div className="result">
+          <div className="result1">
             <h1>Exchange Rates:</h1>
             {Object.keys(exchangeRate).map((key) => (
               <div key={key}>
@@ -102,7 +103,7 @@ function App() {
     <h1>Min Value: {convertedAmount.min_value} {toCurrency}</h1>
   </div>
 )}
-
+</div>
       </div>
     </div>
   );
