@@ -13,15 +13,13 @@ function App() {
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [source, setSource] = useState(null);
 
-
   const getExchangeRate = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/currency-exchange?from=${fromCurrency}&to=${toCurrency}`);
       const data = response.data;
-      console.error(data);
-      if (data ) {
-        setExchangeRate(data.exchange_rate);
-        setSource(data.source)
+     
+      if (data) {
+        setExchangeRate(data);
       } else {
         console.error('Invalid response data:', data);
       }
@@ -30,13 +28,12 @@ function App() {
     }
   };
   
-  
-
   const convertCurrency = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/convert?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`);
       const data = response.data;
-      setConvertedAmount(data.data.converted_amount);
+     
+      setConvertedAmount(data);
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +51,7 @@ function App() {
     };
     getCurrencies();
   }, []);
-
+// console.log(convertedAmount)
   return (
     <div className="App">
       <div className="box">
@@ -89,15 +86,23 @@ function App() {
         </div>
         {exchangeRate && (
           <div className="result">
-            <h1>Exchange Rate: {exchangeRate.toFixed(2)}</h1>
-            <h1>Source: {source}</h1>
+            <h1>Exchange Rates:</h1>
+            {Object.keys(exchangeRate).map((key) => (
+              <div key={key}>
+                <p>exchange_rate: {exchangeRate[key].exchange_rate}</p>
+                <p>Source: {exchangeRate[key].source}</p>
+              </div>
+            ))}
           </div>
         )}
-        {convertedAmount && (
-          <div className="result">
-            <h1>{amount} {fromCurrency} = {convertedAmount.toFixed(2)} {toCurrency}</h1>
-          </div>
-        )}
+
+{convertedAmount && (
+  <div className="result">
+    <h1>Max Value: {convertedAmount.max_value} {toCurrency}</h1>
+    <h1>Min Value: {convertedAmount.min_value} {toCurrency}</h1>
+  </div>
+)}
+
       </div>
     </div>
   );
